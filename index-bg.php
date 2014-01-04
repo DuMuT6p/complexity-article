@@ -1,5 +1,10 @@
 <?php
     ob_start();
+    /* THIS FILE IS A WORK IN PROGRESS
+    * These comments include some remainders and notes
+    * - [TODO] marks will be removed after the lines are double checked for consistency with the terminology
+    * - Lines order, if possible, will be returned to the original at the end of translation
+    */
 ?>
         <h1 id='gentle'>A Gentle Introduction to Algorithm Complexity Analysis</h1>
         Dionysis "dionyziz" Zindros &lt;<a href='mailto:dionyziz@gmail.com'>dionyziz@gmail.com</a>&gt;
@@ -67,43 +72,43 @@
             <li>Прости аритметични операции като събиране и умножение</li>
             <li>Basic arithmetic operations such as addition and multiplication</li>
         </ul>
-        <p>Ще предположим, че раклоняването (изборът между
+        <p>Ще предположим, че раклоняването (изборът между <code>if</code> и <code>else</code> кода след като <code>if</code> условието е било оценено) се проявява моментално и няма да броим тези инструкции. В кода по-горе, първия ред код е:</p>
         <p>We'll assume branching (the choice between <code>if</code> and <code>else</code> parts of code after the <code>if</code> condition has been evaluated) occurs instantly and won't count these instructions. In the above code, the first line of code is:</p>
 
         <pre class='brush: jscript; gutter: false; toolbar: false;'>
             var M = A[ 0 ];
         </pre>
-
+        <p>Това се нуждае от 2 инструкции: Една за взимане на <var>A[ 0 ]</var> и една за присвояване на стойността на <var>M</var> (ще приемем че n е винаги поне 1). Тези две инструкции са винаги задължителни за алгоритъма, независимо от стойността на <var>n</var>. Кодът за инициализацията на цикълът <code>for</code> ще бъде изпълняван винаги. Това ни дава още две инструкции; присвояване и сравненеи:</p>
         <p>This requires 2 instructions: One for looking up <var>A[ 0 ]</var> and one for assigning the value to <var>M</var> (we're assuming that n is always at least 1). These two instructions are always required by the algorithm, regardless of the value of <var>n</var>. The <code>for</code> loop initialization code also has to always run. This gives us two more instructions; an assignment and a comparison:</p>
 
         <pre class='brush: jscript; gutter: false; toolbar: false;'>
             i = 0;
             i &lt; n;
         </pre>
-
+        <p>Тези линии ког ще се изпълнят преди първото преминаваме през цикъла <code>for</code>. След всяко преминаване през цикъла, има нужда да изпълним още 2 инструкции, увеличение с единица на променливата <var>i</var> и сравнение за да проверим дали оставаме в цикъла:</p>
         <p>These will run before the first <code>for</code> loop iteration. After each <code>for</code> loop iteration, we need two more instructions to run, an increment of <var>i</var> and a comparison to check if we'll stay in the loop:</p>
 
         <pre class='brush: jscript; gutter: false; toolbar: false;'>
             ++i;
             i &lt; n;
         </pre>
-
+        <p>И така, ако игнорираме тялото на цикъла, броя на инструкциите от които се нуждае алгоритъма става 4 + 2n. [TODO всъщност]Това прави 4 инструкции в началото на цикъла <code>for</code> и 2 инструкции в края на всяко преминаване, които са <var>n</var> на брой. Вече можем да дефинираме математическа функция f( n ) която, като й се подаде променливата <var>n</var>, връща броя на инструкциите от които се нуждае алгоритъма. За празно тяло на цикъл <code>for</code> имаме f( n ) = 4 + 2n.</p>
         <p>So, if we ignore the loop body, the number of instructions this algorithm needs is 4 + 2n. That is, 4 instructions at the beginning of the <code>for</code> loop and 2 instructions at the end of each iteration of which we have <var>n</var>. We can now define a mathematical function f( n ) that, given an <var>n</var>, gives us the number of instructions the algorithm needs. For an empty <code>for</code> body, we have f( n ) = 4 + 2n.</p>
-
+        <h2 id='worst'>Анализ на най-лошия случай</h2>
         <h2 id='worst'>Worst-case analysis</h2>
-
+        <p>Като погледнем тялото на <code>for</code> имаме операция за взимане на променлива на масив и сравнение които се изпълняват винаги:</p> 
         <p>Now, looking at the <code>for</code> body, we have an array lookup operation and a comparison that happen always:</p>
 
         <pre class='brush: jscript; gutter: false; toolbar: false;'>
             if ( A[ i ] &gt;= M ) { ...
         </pre>
-
+        <p>Вече имаме две инструкции. Обаче тялото на <code>if</code> може да бъде изпълнено или не, в зависимост от стойностите в масива. Ако се окаже, че <code>A[ i ] &gt;= M</code>, тогава ще изпълним тези две допълнителни инструкции - преглед на стойност в масив и присвояване:</p>
         <p>That's two instructions right there. But the <code>if</code> body may run or may not run, depending on what the array values actually are. If it happens to be so that <code>A[ i ] &gt;= M</code>, then we'll run these two additional instructions — an array lookup and an assignment:</p>
 
         <pre class='brush: jscript; gutter: false; toolbar: false;'>
             M = A[ i ]
         </pre>
-
+        <p>Вече не можем да дефинираме f( n ) толкова лесно, защото броя на инструкциите не зависи единствено от <var>n</var>, а също и на нашите входни данни. Например, при <code>A = [ 1, 2, 3, 4 ]</code> алгоритъмът ще има нужда от повече инструкции отколкото при <code>A = [ 4, 3, 2, 1 ]</code>. Когато анализираме алгоритми, често взимаме предвид [TODO]най-лошия случай.
         <p>But now we can't define an f( n ) as easily, because our number of instructions doesn't depend solely on <var>n</var> but also on our input. For example, for <code>A = [ 1, 2, 3, 4 ]</code> the algorithm will need more instructions than for <code>A = [ 4, 3, 2, 1 ]</code>. When analyzing algorithms, we often consider the worst-case scenario. What's the worst that can happen for our algorithm? When does our algorithm need the most instructions to complete? In this case, it is when we have an array in increasing order such as <code>A = [ 1, 2, 3, 4 ]</code>. In that case, <var>M</var> needs to be replaced every single time and so that yields the most instructions. Computer scientists have a fancy name for that and they call it <em>worst-case analysis</em>; that's nothing more than just considering the case when we're the most unlucky. So, in the worst case, we have 4 instructions to run within the <code>for</code> body, so we have f( n ) = 4 + 2n + 4n = 6n + 4. This function f, given a problem size n, gives us the number of instructions that would be needed in the worst-case.</p>
 
         <h2 id='asymptotic'>Asymptotic behavior</h2>
